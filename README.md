@@ -4,6 +4,7 @@ PythonでOpenAIのライブラリを使ってTwitterのAPIと連携させるお�
 main_cui.pyは普通にAPIを使ったときのやつ
 main_gui.pyはfletでGUIを実装したやつ
 
-CUIのsplit_str関数はhttps://gist.github.com/hidsh/6331143 のやつをお借りしました
+CUIのsplit_str関数はhttps://gist.github.com/hidsh/6331143 のやつをお借りしました。
 
-どっちもOpenAIとTwitterのAPIキーを自力で用意しないと動きません
+どっちもOpenAIとTwitterのAPIキーを自力で用意しないと動きません。
+Githubを勉強する意図も兼ねてのものなので見ると気分を害するレベルのスパゲティコードになってます。
