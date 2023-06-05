@@ -24,13 +24,12 @@ class Chatgpt:
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Responses must be 280 characters for Twitter."},
-                {"role": "system", "content": "Only one candidate is allowed."},
+                {"role": "system", "content": "Statements made in the style of anime characters."},
                 {"role": "user", "content": str},
             ]   
         )
 
         msg = response["choices"][0]["message"]["content"]
-        print(msg)
         return msg
     
     def trans2ja(self, str):
@@ -48,13 +47,18 @@ class Chatgpt:
             return res_text
 
 def main(page: ft.Page):
+    page.window_width = 1000        # window's width is 200 px
+    page.window_height = 500       # window's height is 200 px
+    page.window_resizable = False  # window is not resizable
+    page.update()
     chatgpt = Chatgpt()
-    system_message = ft.Text("", color=ft.colors.RED)
+    system_message = ft.Text("", size=20, text_align=ft.TextAlign.CENTER)
 
     def tweet(tweet_content):
         system_message.value = ""
         if len(tweet_content) > 140 :
             system_message.value = "ツイート内容が140字を超過しています"
+            page.update()
             return
         
         # tweepyオブジェクト作成
@@ -66,20 +70,22 @@ def main(page: ft.Page):
         )
 
         #ツイートする
-        # client.create_tweet(text=tweet_content)
-        print(tweet_content)
+        client.create_tweet(text=tweet_content)
+        system_message.value = "送信完了！"
+        page.update()
 
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.title = "Pythonを使ってChatGPTを呼んでGoogle翻訳を通してTwitterに投げよう作戦"
 
     def route_change(route):
         textField = ft.TextField(label="プロンプト", autofocus=True, width=800, hint_text="桜についてのツイートを生成してください")
+        input_info = ft.Text(value="AIが文章を考えています……", size=20, text_align=ft.TextAlign.CENTER, visible=False)
         def jump_confirm(e, value):
+            input_info.visible = True
+            page.update()
             prompt = str(value)
-            print(prompt)
             chatgpt.generate(prompt)
             page.go("/confirm")
-
             
         page.views.clear()
         page.views.append(
@@ -93,6 +99,10 @@ def main(page: ft.Page):
                             textField,
                             ft.ElevatedButton("確定", on_click=lambda e: jump_confirm(e, textField.value)),
                         ], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Row(
+                        [
+                            input_info,
+                        ], alignment=ft.MainAxisAlignment.CENTER),    
                 ],
             )
         )
@@ -113,7 +123,7 @@ def main(page: ft.Page):
                 multiline=True, 
                 min_lines=1, 
                 max_lines=10, 
-                width=800,
+                width=1000,
                 on_change=lambda e:onchange_confirm_textField(e)
                 )
             
@@ -124,12 +134,18 @@ def main(page: ft.Page):
 
                         ft.AppBar(title=ft.Text("投稿確認"), bgcolor=ft.colors.SURFACE_VARIANT),
                         ft.Text("この内容で大丈夫？", size=30, text_align=ft.TextAlign.CENTER),
-                        ft.Row([ft.FilledButton("ツイートする", on_click=lambda e: tweet(confirm_textField.value))], alignment=ft.MainAxisAlignment.END),
+                        ft.Row(
+                            [
+                                ft.FilledButton("ツイートする", on_click=lambda e: tweet(confirm_textField.value))
+                            ], 
+                            alignment=ft.MainAxisAlignment.END),
                         confirm_textField,
                         confirm_info,
-                        system_message,
+                        ft.Row(
+                        [
+                            system_message,
+                        ], alignment=ft.MainAxisAlignment.CENTER),    
                         ft.ElevatedButton("やりなおす", on_click=lambda _: page.go("/")),
-                        # ft.ElevatedButton("終わる", on_click=quit),
                     ],
                     
                 )
