@@ -1,0 +1,7 @@
+# ChatGPTtoTwitter
+PythonでOpenAIのライブラリを使ってTwitterのAPIと連携させるお遊びプログラム
+
+main_cui.pyは普通にAPIを使ったときのやつ
+main_gui.pyはfletでGUIを実装したやつ
+
+CUIのsplit_str関数はhttps://gist.github.com/hidsh/6331143 のやつをお借りしました
