@@ -5,3 +5,5 @@ main_cui.pyは普通にAPIを使ったときのやつ
 main_gui.pyはfletでGUIを実装したやつ
 
 CUIのsplit_str関数はhttps://gist.github.com/hidsh/6331143 のやつをお借りしました
+
+どっちもOpenAIとTwitterのAPIキーを自力で用意しないと動きません
