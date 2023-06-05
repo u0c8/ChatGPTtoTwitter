@@ -1,3 +1,4 @@
 
 openaiAPI.py
 twitterAPI.py
+*.pyc
